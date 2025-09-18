@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Container, Box, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/authSlice";
@@ -8,6 +8,14 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ✅ Redirect to songs if user is already logged in
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
+    if (currentUser) {
+      navigate("/songs");
+    }
+  }, [navigate]);
 
   const handleSubmit = () => {
     // get registered users from localStorage
@@ -23,6 +31,8 @@ export default function Login() {
 
     // store logged-in user in Redux + localStorage
     dispatch(login({ email: user.email }));
+    localStorage.setItem("mm_currentUser", JSON.stringify({ email: user.email }));
+
     navigate("/songs"); // redirect to Song List page
   };
 

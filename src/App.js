@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 
@@ -7,6 +7,9 @@ import SignUp from "./components/Auth/SignUp";
 import Login from "./components/Auth/Login";
 import SongList from "./components/Songs/SongList";
 import AddSong from "./components/Songs/AddSong";
+import { isLoggedIn } from "./components/utils/auth";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 // 🔹 Seed dummy user + songs into localStorage
 const seedDummyData = () => {
@@ -46,18 +49,50 @@ const seedDummyData = () => {
 seedDummyData();
 
 function App() {
+  console.log("isLoggedIn::", isLoggedIn());
   return (
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/songs" element={<SongList />} />
-          <Route path="/add-song" element={<AddSong />} />
+          {/* Public routes */}
+          
+          <Route
+            path="/"
+            element={isLoggedIn() ? <Navigate to="/dashboard" /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={isLoggedIn() ? <Navigate to="/songs" /> : <SignUp />}
+          />
+
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/songs"
+            element={
+              <ProtectedRoute>
+                <SongList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-song"
+            element={
+              <ProtectedRoute>
+                <AddSong />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </Provider>
   );
 }
-
 export default App;
