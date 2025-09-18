@@ -23,7 +23,9 @@ export default function AddSong() {
     if (editingSong) {
       dispatch(editSong(newSong));
       const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
-      const updatedSongs = allSongs.map((s) => (s.id === newSong.id ? newSong : s));
+      const updatedSongs = allSongs.map((s) =>
+        s.id === newSong.id ? newSong : s
+      );
       localStorage.setItem("mm_songs", JSON.stringify(updatedSongs));
     } else {
       dispatch(addSong(newSong));
@@ -73,6 +75,19 @@ export default function AddSong() {
           margin="normal"
           value={song.year}
           onChange={(e) => setSong({ ...song, year: e.target.value })}
+        />
+        <TextField
+          type="file"
+          fullWidth
+          margin="normal"
+          inputProps={{ accept: "audio/*" }}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const url = URL.createObjectURL(file); // temporary URL
+              setSong({ ...song, url });
+            }
+          }}
         />
 
         <Button

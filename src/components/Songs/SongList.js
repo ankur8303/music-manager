@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
 import { deleteSong } from "../../redux/songSlice";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +25,8 @@ export default function SongList() {
   const [songs, setSongs] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(15)
+  const [rowsPerPage] = useState(15);
+  const [playingSong, setPlayingSong] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
@@ -46,6 +48,10 @@ export default function SongList() {
 
   const handleEdit = (song) => {
     navigate("/add-song", { state: { song } });
+  };
+
+  const handlePlay = (url) => {
+    setPlayingSong(url);
   };
 
   const filteredSongs = songs.filter((s) =>
@@ -119,15 +125,29 @@ export default function SongList() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((song, index) => (
                   <TableRow key={song.id} hover>
-                    <TableCell sx={{ color: "#fff" }}>{index + 1 + page * rowsPerPage}</TableCell>
+                    <TableCell sx={{ color: "#fff" }}>
+                      {index + 1 + page * rowsPerPage}
+                    </TableCell>
                     <TableCell sx={{ color: "#fff" }}>{song.title}</TableCell>
                     <TableCell sx={{ color: "#fff" }}>{song.singer}</TableCell>
                     <TableCell sx={{ color: "#fff" }}>{song.year}</TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleEdit(song)} sx={{ color: "#4fc3f7" }}>
+                      <IconButton
+                        onClick={() => handlePlay(song.url)}
+                        sx={{ color: "#4caf50" }}
+                      >
+                        <PlayArrowIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleEdit(song)}
+                        sx={{ color: "#4fc3f7" }}
+                      >
                         <EditIcon />
                       </IconButton>
-                      <IconButton onClick={() => handleDelete(song.id)} sx={{ color: "#f06292" }}>
+                      <IconButton
+                        onClick={() => handleDelete(song.id)}
+                        sx={{ color: "#f06292" }}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -150,6 +170,12 @@ export default function SongList() {
             "& .MuiTablePagination-toolbar": { color: "#fff" },
           }}
         />
+
+        {playingSong && (
+          <Box sx={{ mt: 3, textAlign: "center" }}>
+            <audio controls src={playingSong} autoPlay style={{ width: "100%" }} />
+          </Box>
+        )}
       </Container>
     </Box>
   );

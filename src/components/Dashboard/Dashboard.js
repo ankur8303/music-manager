@@ -18,7 +18,7 @@ export default function Dashboard() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "80vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

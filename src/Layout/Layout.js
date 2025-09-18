@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "80vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -29,7 +29,7 @@ export default function Layout({ children }) {
         sx={{
           position: "relative",
           zIndex: 1,
-          backdropFilter: "blur(20px)", // glass effect for container
+          backdropFilter: "blur(20px)",
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           borderRadius: 4,
           boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
