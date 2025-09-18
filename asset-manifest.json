@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/music-manager-demo/static/css/main.e6c13ad2.css",
+    "main.js": "/music-manager-demo/static/js/main.220a4ca9.js",
+    "static/js/453.2d294669.chunk.js": "/music-manager-demo/static/js/453.2d294669.chunk.js",
+    "index.html": "/music-manager-demo/index.html",
+    "main.e6c13ad2.css.map": "/music-manager-demo/static/css/main.e6c13ad2.css.map",
+    "main.220a4ca9.js.map": "/music-manager-demo/static/js/main.220a4ca9.js.map",
+    "453.2d294669.chunk.js.map": "/music-manager-demo/static/js/453.2d294669.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.220a4ca9.js"
+  ]
+}
