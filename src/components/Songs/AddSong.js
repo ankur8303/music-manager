@@ -9,8 +9,6 @@ export default function AddSong() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
-
-  // Check if editing existing song
   const editingSong = location.state?.song;
 
   const [song, setSong] = useState(
@@ -22,18 +20,12 @@ export default function AddSong() {
       return alert("Please fill all fields!");
 
     const newSong = { ...song, owner: currentUser.email };
-
-    // Update if editing
     if (editingSong) {
-      // Update Redux
       dispatch(editSong(newSong));
-
-      // Update localStorage
       const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
       const updatedSongs = allSongs.map((s) => (s.id === newSong.id ? newSong : s));
       localStorage.setItem("mm_songs", JSON.stringify(updatedSongs));
     } else {
-      // Add new song
       dispatch(addSong(newSong));
 
       const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");

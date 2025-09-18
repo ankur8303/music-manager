@@ -9,8 +9,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("mm_currentUser"); // remove logged-in user
-    navigate("/"); // go back to login
+    localStorage.removeItem("mm_currentUser");
+    navigate("/");
   };
 
   const user = JSON.parse(localStorage.getItem("mm_currentUser"));

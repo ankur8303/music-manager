@@ -10,7 +10,7 @@ export default function Layout({ children }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", // gradient background
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -18,7 +18,7 @@ export default function Layout({ children }) {
           left: 0,
           width: "100%",
           height: "100%",
-          backdropFilter: "blur(10px)", // glass blur
+          backdropFilter: "blur(10px)",
           backgroundColor: "rgba(253, 250, 250, 0.96)",
           zIndex: 0,
         },

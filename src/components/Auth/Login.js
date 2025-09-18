@@ -15,8 +15,6 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Redirect if already logged in
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
     if (currentUser) navigate("/dashboard");
@@ -40,7 +38,7 @@ export default function Login() {
   };
 
   const handleDummyLogin = () => {
-    // Dummy user credentials
+
     const dummyUser = { email: "test@example.com", password: "123456" };
     dispatch(login({ email: dummyUser.email }));
     localStorage.setItem("mm_currentUser", JSON.stringify({ email: dummyUser.email }));

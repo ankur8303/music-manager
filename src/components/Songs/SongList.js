@@ -24,13 +24,12 @@ export default function SongList() {
   const [songs, setSongs] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(15); // max 15 items per page
+  const [rowsPerPage] = useState(15)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
 
   useEffect(() => {
-    // Load user's songs from localStorage
     const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
     const userSongs = allSongs.filter((s) => s.owner === currentUser.email);
     setSongs(userSongs);
@@ -39,11 +38,7 @@ export default function SongList() {
   const handleDelete = (id) => {
     const updatedSongs = songs.filter((s) => s.id !== id);
     setSongs(updatedSongs);
-
-    // Update Redux
     dispatch(deleteSong(id));
-
-    // Update localStorage
     const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
     const remainingSongs = allSongs.filter((s) => s.id !== id);
     localStorage.setItem("mm_songs", JSON.stringify(remainingSongs));
