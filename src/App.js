@@ -10,6 +10,7 @@ import AddSong from "./components/Songs/AddSong";
 import { isLoggedIn } from "./components/utils/auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Layout from "./Layout/Layout";
 
 // 🔹 Seed dummy user + songs into localStorage
 const seedDummyData = () => {
@@ -55,22 +56,30 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Public routes */}
-          
+
           <Route
             path="/"
-            element={isLoggedIn() ? <Navigate to="/dashboard" /> : <Login />}
+            element={
+              <Layout>
+                {isLoggedIn() ? <Navigate to="/dashboard" /> : <Login />}
+              </Layout>
+            }
           />
           <Route
             path="/signup"
-            element={isLoggedIn() ? <Navigate to="/songs" /> : <SignUp />}
+            element={
+              <Layout>
+                {isLoggedIn() ? <Navigate to="/dashboard" /> : <SignUp />}
+              </Layout>
+            }
           />
-
-          {/* Protected routes */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Layout>
+                  <Dashboard />
+                </Layout>
               </ProtectedRoute>
             }
           />
@@ -78,7 +87,9 @@ function App() {
             path="/songs"
             element={
               <ProtectedRoute>
-                <SongList />
+                <Layout>
+                  <SongList />
+                </Layout>
               </ProtectedRoute>
             }
           />
@@ -86,7 +97,9 @@ function App() {
             path="/add-song"
             element={
               <ProtectedRoute>
-                <AddSong />
+                <Layout>
+                  <AddSong />
+                </Layout>
               </ProtectedRoute>
             }
           />

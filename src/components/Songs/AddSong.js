@@ -1,24 +1,97 @@
-import React, { useState } from "react";
-import { TextField, Button, Container } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Container, Box, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { addSong } from "../../redux/songSlice";
+import { addSong, editSong } from "../../redux/songSlice";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AddSong() {
-  const [song, setSong] = useState({ id: Date.now(), title: "", singer: "", year: "" });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentUser = JSON.parse(localStorage.getItem("mm_currentUser"));
+
+  // Check if editing existing song
+  const editingSong = location.state?.song;
+
+  const [song, setSong] = useState(
+    editingSong || { id: Date.now(), title: "", singer: "", year: "" }
+  );
 
   const handleSubmit = () => {
-    if (!song.title || !song.singer) return alert("Fill all details!");
-    dispatch(addSong(song));
+    if (!song.title || !song.singer || !song.year)
+      return alert("Please fill all fields!");
+
+    const newSong = { ...song, owner: currentUser.email };
+
+    // Update if editing
+    if (editingSong) {
+      // Update Redux
+      dispatch(editSong(newSong));
+
+      // Update localStorage
+      const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
+      const updatedSongs = allSongs.map((s) => (s.id === newSong.id ? newSong : s));
+      localStorage.setItem("mm_songs", JSON.stringify(updatedSongs));
+    } else {
+      // Add new song
+      dispatch(addSong(newSong));
+
+      const allSongs = JSON.parse(localStorage.getItem("mm_songs") || "[]");
+      allSongs.push(newSong);
+      localStorage.setItem("mm_songs", JSON.stringify(allSongs));
+    }
+
+    navigate("/songs");
   };
 
   return (
-    <Container maxWidth="sm">
-      <h2>Add New Song</h2>
-      <TextField label="Title" fullWidth margin="normal" onChange={(e) => setSong({ ...song, title: e.target.value })}/>
-      <TextField label="Singer" fullWidth margin="normal" onChange={(e) => setSong({ ...song, singer: e.target.value })}/>
-      <TextField label="Year" type="number" fullWidth margin="normal" onChange={(e) => setSong({ ...song, year: e.target.value })}/>
-      <Button variant="contained" fullWidth onClick={handleSubmit}>Save</Button>
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <Box
+        sx={{
+          backdropFilter: "blur(15px)",
+          backgroundColor: "rgba(255,255,255,0.1)",
+          p: 4,
+          borderRadius: 3,
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          {editingSong ? "Edit Song" : "Add New Song"}
+        </Typography>
+
+        <TextField
+          label="Title"
+          fullWidth
+          margin="normal"
+          value={song.title}
+          onChange={(e) => setSong({ ...song, title: e.target.value })}
+        />
+
+        <TextField
+          label="Singer"
+          fullWidth
+          margin="normal"
+          value={song.singer}
+          onChange={(e) => setSong({ ...song, singer: e.target.value })}
+        />
+
+        <TextField
+          label="Year"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={song.year}
+          onChange={(e) => setSong({ ...song, year: e.target.value })}
+        />
+
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={handleSubmit}
+        >
+          {editingSong ? "Update Song" : "Save Song"}
+        </Button>
+      </Box>
     </Container>
   );
 }
